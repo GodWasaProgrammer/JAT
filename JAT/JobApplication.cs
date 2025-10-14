@@ -1,4 +1,6 @@
-﻿namespace JAT;
+﻿using Enums;
+
+namespace JAT;
 
 public class JobApplication
 {
@@ -14,7 +16,7 @@ public class JobApplication
     private string? CompanyName { get; set; }
     private string? PositionTitle { get; set; }
 
-    private ApplicationStatus Status { get; set; }
+    public ApplicationStatus Status { get; set; }
     private DateTime ApplicationDate { get; set; }
     private DateTime? ResponseDate { get; set; }
     private int SalaryExpectation { get; set; }
@@ -39,11 +41,3 @@ public class JobApplication
 
 }
 
-public enum ApplicationStatus
-{
-    Applied,
-    Interviewing,
-    Offer,
-    Rejected,
-    Accepted
-}
