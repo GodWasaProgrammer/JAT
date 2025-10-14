@@ -1,0 +1,237 @@
+🔹 FAS 1 — Projektets grundläggande setup
+1. Skapa projektet
+
+Syfte: Sätta upp grundstrukturen och versionshantering.
+
+ Skapa ett nytt C# Console Project i Visual Studio eller Rider.
+Ex: JobApplicationTracker
+
+ Initiera ett nytt Git-repository lokalt (git init).
+
+ Skapa första commit:
+"Initial commit - Created JobApplicationTracker console project"
+
+ Skapa ett GitHub-repo och länka (git remote add origin ...).
+
+ Skapa main-grenen och push:a till GitHub.
+
+ Aktivera branch protection för main:
+
+Ingen direkt push
+
+Kräver pull request
+
+📂 Struktur (i detta läge):
+
+JobApplicationTracker/
+│
+├── Program.cs
+├── JobApplication.cs
+├── JobManager.cs
+├── README.md
+└── JobApplicationTracker.csproj
+
+🔹 FAS 2 — Klassdesign & grundläggande OOP
+2. Skapa klassen JobApplication
+
+Syfte: Representera en jobbansökan med relevanta attribut & metoder.
+
+ Skapa en ny branch: feature/jobapplication
+
+ Implementera:
+
+CompanyName : string
+
+PositionTitle : string
+
+Status : enum { Applied, Interview, Offer, Rejected }
+
+ApplicationDate : DateTime
+
+ResponseDate : DateTime?
+
+SalaryExpectation : int
+
+ Lägg till metoder:
+
+GetDaysSinceApplied()
+
+GetSummary()
+
+ Testa genom att skapa ett objekt i Program.cs.
+
+ Commit & Push.
+
+ Skapa Pull Request → main:
+“Added JobApplication class with enum and helper methods”
+
+ Merge via PR (inte direkt push).
+
+🔹 FAS 3 — Hantering av ansökningar (JobManager)
+3. Skapa klassen JobManager
+
+Syfte: Hantera listan av ansökningar samt CRUD-operationer.
+
+ Skapa ny branch: feature/jobmanager
+
+ Lägg till:
+
+List<JobApplication> Applications
+
+Metoder:
+
+AddJob()
+
+UpdateStatus()
+
+ShowAll()
+
+RemoveJob()
+
+ Använd enkel testdata i Program.cs för att verifiera.
+
+ Lägg till felhantering (TryParse, null-checks etc.)
+
+ Commit & Push
+
+ Skapa Pull Request:
+“Implemented JobManager with CRUD methods”
+
+ Merge till main.
+
+🔹 FAS 4 — Menysystem (konsolinteraktion)
+4. Implementera menysystemet i Program.cs
+
+Syfte: Göra programmet interaktivt och användarvänligt.
+
+ Skapa ny branch: feature/menu
+
+ Bygg ett while (true) loop-baserat menysystem.
+
+ Menyalternativ:
+
+1. Lägg till ny ansökan
+2. Visa alla ansökningar
+3. Filtrera efter status
+4. Sortera efter datum
+5. Visa statistik
+6. Uppdatera status
+7. Ta bort ansökan
+8. Avsluta
+
+
+ Anropa metoder i JobManager beroende på val.
+
+ Lägg till färger i konsolen (grön/röd/gul/blå beroende på status).
+
+ Commit & Push
+
+ Skapa Pull Request:
+“Added menu system for JobManager interaction”
+
+ Merge via PR.
+
+🔹 FAS 5 — LINQ-funktionalitet (VG-del)
+5. Lägg till LINQ-funktioner
+
+Syfte: Filtrering, sortering och statistik.
+
+ Skapa ny branch: feature/linq
+
+ Implementera i JobManager:
+
+ShowByStatus()
+→ Applications.Where(a => a.Status == selectedStatus)
+
+SortByDate()
+→ Applications.OrderBy(a => a.ApplicationDate)
+
+ShowStatistics()
+→ LINQ:
+
+total = Applications.Count();
+perStatus = Applications.GroupBy(a => a.Status);
+averageResponseTime = Applications
+    .Where(a => a.ResponseDate != null)
+    .Average(a => (a.ResponseDate - a.ApplicationDate)?.TotalDays);
+
+
+Bonusfilter:
+“Visa ansökningar utan svar äldre än 14 dagar”
+
+ Testa LINQ-utdata i konsolen.
+
+ Commit & Push
+
+ Skapa Pull Request:
+“Implemented LINQ filtering, sorting and statistics”
+
+ Merge via PR.
+
+🔹 FAS 6 — Finputsning & dokumentation
+6. Förbättringar och strukturering
+
+Syfte: Slutföra projektet på ett professionellt sätt.
+
+ Dela upp alla klasser i separata filer (om inte redan gjort)
+
+ Lägg till XML-kommentarer på publika metoder
+
+ Rensa onödig kod & gör namn konsekventa (PascalCase, etc.)
+
+ Testa alla menyval.
+
+🔹 FAS 7 — GitHub & inlämningskrav
+7. Versionshantering & dokumentation
+
+Syfte: Säkerställa att allt följer kursens GitHub-krav.
+
+✅ Kontrollera:
+
+ Minst 3 branches (main, jobmanager, linq, menu)
+
+ Minst 3 pull requests
+
+ Minst 5 commits med tydliga meddelanden
+
+ Branch protection aktiv
+
+ README.md inkluderar:
+
+Projektbeskrivning
+
+Hur man kör programmet
+
+Ditt namn & datum
+
+Kort reflektion
+
+🔹 FAS 8 — Reflektionsfrågor
+
+Skapa en separat textfil, t.ex. Reflection.txt:
+
+Besvara:
+
+Hur hjälpte LINQ dig att skriva renare kod?
+
+Vilken del av projektet var mest utmanande, och hur löste du den?
+
+Commit & push denna fil.
+
+🔹 FAS 9 — Slutkontroll innan inlämning
+
+✅ Checklista:
+
+ Programmet körs utan fel
+
+ Menyn fungerar korrekt
+
+ LINQ-funktionerna fungerar
+
+ README.md och Reflection.txt finns
+
+ Alla PR är mergade
+
+ Main-grenen skyddad
+
+ Repo är offentligt (eller delat med läraren)
