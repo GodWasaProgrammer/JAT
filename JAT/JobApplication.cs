@@ -2,13 +2,24 @@
 
 public class JobApplication
 {
-    string? CompanyName { get; set; }
-    string? PositionTitle { get; set; }
+    public JobApplication(string? companyName, string? positionTitle, ApplicationStatus status, DateTime applicationDate, int salaryExpectation)
+    {
+        CompanyName = companyName;
+        PositionTitle = positionTitle;
+        Status = status;
+        ApplicationDate = applicationDate;
+        SalaryExpectation = salaryExpectation;
+    }
 
-    ApplicationStatus Status { get; set; }
-    DateTime ApplicationDate { get; set; }
-    DateTime ResponseDate { get; set; }
-    int SalaryExpectation { get; set; }
+    private string? CompanyName { get; set; }
+    private string? PositionTitle { get; set; }
+
+    private ApplicationStatus Status { get; set; }
+    private DateTime ApplicationDate { get; set; }
+    private DateTime? ResponseDate { get; set; }
+    private int SalaryExpectation { get; set; }
+
+    
 
     public int GetDaysSinceApplied()
     {
@@ -17,7 +28,13 @@ public class JobApplication
 
     public string GetSummary()
     {
-        return $"{PositionTitle} at {CompanyName}, applied on {ApplicationDate.ToShortDateString()}, current status: {Status}";
+        return $"{PositionTitle} at {CompanyName}, applied on {ApplicationDate.ToShortDateString()}, current status: {Status} Requested Salary:{SalaryExpectation}";
+    }
+
+    public string UpdateStatus(ApplicationStatus updatedStatus)
+    {
+        Status = updatedStatus;
+        return $"Status updated to {Status}";
     }
 
 }
