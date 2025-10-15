@@ -37,6 +37,11 @@ public class JobApplication
         };
 
         var reset = "\u001b[0m";
+
+        if(ResponseDate != null)
+        {
+            return $"{PositionTitle} at {CompanyName}, applied on {ApplicationDate.ToShortDateString()}, responded on {ResponseDate?.ToShortDateString()}, final status: {color}{Status}{reset} Requested Salary:{SalaryExpectation}";
+        }
         return $"{PositionTitle} at {CompanyName}, applied on {ApplicationDate.ToShortDateString()}, current status: {color}{Status}{reset} Requested Salary:{SalaryExpectation}";
     }
 

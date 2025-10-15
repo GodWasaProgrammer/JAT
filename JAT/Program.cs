@@ -5,8 +5,6 @@ namespace JAT;
 
 internal class Program
 {
-
-
     static void Main()
     {
         var jobman = new JobManager();
@@ -17,11 +15,18 @@ internal class Program
         var deg = 43000;
         var test1 = new JobApplication("DonkeyTech", "CodeMonkey", ApplicationStatus.Applied, datetime1, deg);
         var test2 = new JobApplication("CodeMonkeys INC", "Vibe Code CleanUp Specialist", ApplicationStatus.Applied, datetime2, deg);
-        var test3 = new JobApplication("Foobar INC", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test3 = new JobApplication("FBI INC", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test4 = new JobApplication("Bureau Of Memetic Warfare", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test5 = new JobApplication("Kekistani republic", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test6 = new JobApplication("www.bulkthumbnailcreator.com", "Dev", ApplicationStatus.Accepted, datetime3, deg);
+        test6.ResponseDate = new DateTime(2025, 7, 20);
 
         jobman.AddApplication(test1);
         jobman.AddApplication(test2);
         jobman.AddApplication(test3);
+        jobman.AddApplication(test4);
+        jobman.AddApplication(test5);
+        jobman.AddApplication(test6);
         //// end testdata 
 
 
@@ -121,11 +126,16 @@ internal class Program
                     int parsed;
                     while (true)
                     {
-                        Console.WriteLine("Enter your salary expecation as a number:");
+                        Console.WriteLine("Enter your salary expectation as a number in SEK:");
                         var salary = Console.ReadLine();
                         var res = Int32.TryParse(salary, out parsed);
                         if (res)
                         {
+                            if(parsed < 0)
+                            {
+                                Console.WriteLine("Salary cant be negative, try again.");
+                                continue;
+                            }
                             break;
                         }
                     }

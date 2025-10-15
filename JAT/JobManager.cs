@@ -85,6 +85,18 @@ public class JobManager
         Console.WriteLine("=== Job Application Statistics ===\n");
         Console.WriteLine($"Total applications: {total}");
         Console.WriteLine($"Average requested salary: {avgSalary:F0} SEK\n");
+    
+        var responded = Applications.Where(a => a.ResponseDate != null).ToList();
+        if (responded.Any())
+        {
+            var avgResponseDays = responded
+                .Average(a => (a.ResponseDate.Value - a.ApplicationDate).TotalDays);
+            Console.WriteLine($"Average response time: {avgResponseDays:F1} days");
+        }
+        else
+        {
+            Console.WriteLine("Average response time: N/A (no responses yet)");
+        }
         Console.WriteLine($"Applications older than 14 days:{OlderThan14Days}");
 
         Console.WriteLine("Applications by status:");
@@ -110,6 +122,8 @@ public class JobManager
             Console.ResetColor();
         }
 
+
+
         Console.WriteLine($"\nNewest application: {latest.GetSummary()}");
         Console.WriteLine($"Oldest application: {oldest.GetSummary()}");
         ShowOlderThen14DaysAndNoResponse();
@@ -130,11 +144,5 @@ public class JobManager
     public void RemoveJob(JobApplication jobApplication)
     {
         Applications.Remove(jobApplication);
-    }
-
-    public void ChangeStatus(JobApplication jobApplication, ApplicationStatus newStatus)
-    {
-        var app = Applications.Find(a => a == jobApplication);
-        app?.UpdateStatus(newStatus);
     }
 }
