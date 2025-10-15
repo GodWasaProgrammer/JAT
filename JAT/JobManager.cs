@@ -89,7 +89,26 @@ public class JobManager
 
         Console.WriteLine("Applications by status:");
         foreach (var group in byStatus)
+        {
+            // Välj färg baserat på status
+            switch (group.Status)
+            {
+                case ApplicationStatus.Accepted:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case ApplicationStatus.Rejected:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+            }
+
             Console.WriteLine($"  {group.Status}: {group.Count}");
+
+            // Återställ färgen till standard
+            Console.ResetColor();
+        }
 
         Console.WriteLine($"\nNewest application: {latest.GetSummary()}");
         Console.WriteLine($"Oldest application: {oldest.GetSummary()}");
