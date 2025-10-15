@@ -13,11 +13,13 @@ internal class Program
         var datetime2 = new DateTime(2025, 4, 5);
         var datetime3 = new DateTime(2025, 7, 5);
         var deg = 43000;
+        var deg2 = 55000;
+        var deg3 = 75000;
         var test1 = new JobApplication("DonkeyTech", "CodeMonkey", ApplicationStatus.Applied, datetime1, deg);
-        var test2 = new JobApplication("CodeMonkeys INC", "Vibe Code CleanUp Specialist", ApplicationStatus.Applied, datetime2, deg);
+        var test2 = new JobApplication("CodeMonkeys INC", "Vibe Code CleanUp Specialist", ApplicationStatus.Applied, datetime2, deg2);
         var test3 = new JobApplication("FBI INC", "Dev", ApplicationStatus.Applied, datetime3, deg);
-        var test4 = new JobApplication("Bureau Of Memetic Warfare", "Dev", ApplicationStatus.Applied, datetime3, deg);
-        var test5 = new JobApplication("Kekistani republic", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test4 = new JobApplication("Bureau Of Memetic Warfare", "Dev", ApplicationStatus.Applied, datetime3, deg3);
+        var test5 = new JobApplication("Kekistani republic", "Dev", ApplicationStatus.Applied, datetime3, deg2);
         var test6 = new JobApplication("www.bulkthumbnailcreator.com", "Dev", ApplicationStatus.Accepted, datetime3, deg);
         test6.ResponseDate = new DateTime(2025, 7, 20);
 
@@ -29,7 +31,8 @@ internal class Program
         jobman.AddApplication(test6);
         //// end testdata 
 
-
+        // our absolute shitshow of a menu
+        // This was not separated into a service because the document clearly specified it needed to be in program.cs
         var menuChoice = MenuSelect.AddApplication;
         var menuChoices = Enum.GetValues<MenuSelect>();
         while (true)

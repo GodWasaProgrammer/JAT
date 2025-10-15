@@ -1,5 +1,8 @@
 ﻿namespace Enums;
 
+/// <summary>
+/// Status of a job application
+/// </summary>
 public enum ApplicationStatus
 {
     Applied,
@@ -9,6 +12,9 @@ public enum ApplicationStatus
     Accepted
 }
 
+/// <summary>
+/// Our main menu options
+/// </summary>
 public enum MenuSelect
 {
     AddApplication,

@@ -50,3 +50,8 @@ Syftet med projektet är att visa kunskap inom:
 1. Klona repot:
    ```bash
    git clone https://github.com/<ditt-användarnamn>/<repo-namn>.git
+
+
+## Reflektion
+1. Linq är användbart men jag föredrar vanliga loopar för läsbarhetens skull.
+2. Switch cases. Jag hatar switch cases. De är fula och svårlästa och kräver massa scaffolding.
