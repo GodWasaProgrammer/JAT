@@ -2,7 +2,6 @@
 
 public enum ApplicationStatus
 {
-    Init,
     Applied,
     Interviewing,
     Offer,
@@ -12,7 +11,6 @@ public enum ApplicationStatus
 
 public enum MenuSelect
 {
-    Init,
     AddApplication,
     ShowAllApplications,
     FilterByStatus,

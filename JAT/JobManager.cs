@@ -18,19 +18,17 @@ public class JobManager
         var jobtitle = Console.ReadLine();
 
         // get status
-        var selector = -1;
-        var appstatus = ApplicationStatus.Init;
+        var appstatus = ApplicationStatus.Applied;
 
 
         bool looper = false;
+        var selector = 0;
         while (!looper)
         {
             Console.WriteLine($"select status:");
             foreach (var entry in Enum.GetValues(typeof(ApplicationStatus)))
             {
                 selector++;
-                if(selector == 0)
-                    continue;
                 Console.WriteLine($"{selector}.{entry.ToString()}");
             }
             looper = Int32.TryParse(Console.ReadLine(), out selector);
@@ -76,7 +74,7 @@ public class JobManager
             }
         }
 
-        var newapplication = new JobApplication(CompanyName, jobtitle, appstatus,applicationDate,parsed);
+        var newapplication = new JobApplication(CompanyName, jobtitle, appstatus, applicationDate, parsed);
         Applications.Add(newapplication);
     }
 
@@ -103,9 +101,13 @@ public class JobManager
     public void FilterByStatus(ApplicationStatus StatusToSearch)
     {
         var res = Applications.FindAll(a => a.Status == StatusToSearch);
-        foreach(var entry in res)
+        foreach (var entry in res)
         {
-            Console.WriteLine(entry.GetSummary()); 
+            Console.WriteLine(entry.GetSummary());
+        }
+        if(res.Count == 0)
+        {
+            Console.WriteLine("No applications found with that status.");
         }
     }
 

@@ -19,45 +19,42 @@ internal class Program
         jobman.AddApplication(test2);
         jobman.AddApplication(test3);
 
-        var menuChoice = MenuSelect.Init;
-
+        var menuChoice = MenuSelect.AddApplication;
+        var menuChoices = Enum.GetValues<MenuSelect>();
         while (true)
         {
-            var selector = -1;
+            int selector = 0;
+            Console.WriteLine("=====================================");
+            Console.WriteLine("Main Menu Job Application Tracker");
+            Console.WriteLine("=====================================");
             Console.WriteLine("Make your choice ");
+            Console.WriteLine("=====================================");
             foreach (var entry in Enum.GetValues(typeof(MenuSelect)))
             {
                 selector++;
-                if (selector == 0)
-                    continue;
                 Console.WriteLine($"{selector}.{entry}");
             }
+            Console.WriteLine("=====================================");
+
             bool resolve = false;
             while (!resolve)
             {
                 var res = Console.ReadLine();
                 resolve = Int32.TryParse(res, out selector);
+                if (selector > menuChoices.Length || selector < 1)
+                {
+                    resolve = false;
+                }
                 if (!resolve)
                 {
-                    Console.WriteLine("Couldnt parse your input. It should be a number.");
+                    Console.WriteLine("Couldnt parse your input. It should be a number and not negative nor zero.");
+
+                }
+                else
+                {
+                    menuChoice = menuChoices[selector - 1];
                 }
             }
-
-            if (selector == 1)
-                menuChoice = MenuSelect.AddApplication;
-            if (selector == 2)
-                menuChoice = MenuSelect.ShowAllApplications;
-            if (selector == 3)
-                menuChoice = MenuSelect.FilterByStatus;
-            if (selector == 4)
-                menuChoice = MenuSelect.ShowStatistics;
-            if (selector == 5)
-                menuChoice = MenuSelect.UpdateStatus;
-            if (selector == 6)
-                menuChoice = MenuSelect.RemoveApplication;
-            if (selector == 7)
-                menuChoice = MenuSelect.ExitApplication;
-
             switch (menuChoice)
             {
                 case MenuSelect.AddApplication:
@@ -67,7 +64,32 @@ internal class Program
                     jobman.ShowAll();
                     break;
                 case MenuSelect.FilterByStatus:
-                    jobman.FilterByStatus(ApplicationStatus.Applied);
+                    var applicationStatuses = Enum.GetValues<ApplicationStatus>();
+                    var status = applicationStatuses[0];
+                    while (true)
+                    {
+                        var statusSelector = 0;
+                        Console.WriteLine("==== Select status ====");
+                        foreach (var entry in applicationStatuses)
+                        {
+                            statusSelector++;
+                            Console.WriteLine($"{statusSelector}.{entry}");
+                        }
+                        Console.WriteLine("=========================");
+                        var res = Console.ReadLine();
+                        var resolved = Int32.TryParse(res, out statusSelector);
+                        if (statusSelector > applicationStatuses.Length || statusSelector < 1)
+                        {
+                            resolved = false;
+                            Console.WriteLine("Invalid input, try again");
+                        }
+                        if (resolved)
+                        {
+                            status = applicationStatuses[statusSelector - 1];
+                            break;
+                        }
+                    }
+                    jobman.FilterByStatus(status);
                     break;
                 case MenuSelect.SortByDate:
                     break;
@@ -78,7 +100,7 @@ internal class Program
                 case MenuSelect.RemoveApplication:
                     break;
                 case MenuSelect.ExitApplication:
-                    break;
+                    return;
             }
         }
     }
