@@ -5,8 +5,6 @@ namespace JAT;
 
 internal class Program
 {
-
-
     static void Main()
     {
         var jobman = new JobManager();
@@ -17,11 +15,18 @@ internal class Program
         var deg = 43000;
         var test1 = new JobApplication("DonkeyTech", "CodeMonkey", ApplicationStatus.Applied, datetime1, deg);
         var test2 = new JobApplication("CodeMonkeys INC", "Vibe Code CleanUp Specialist", ApplicationStatus.Applied, datetime2, deg);
-        var test3 = new JobApplication("Foobar INC", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test3 = new JobApplication("FBI INC", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test4 = new JobApplication("Bureau Of Memetic Warfare", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test5 = new JobApplication("Kekistani republic", "Dev", ApplicationStatus.Applied, datetime3, deg);
+        var test6 = new JobApplication("www.bulkthumbnailcreator.com", "Dev", ApplicationStatus.Accepted, datetime3, deg);
+        test6.ResponseDate = new DateTime(2025, 7, 20);
 
         jobman.AddApplication(test1);
         jobman.AddApplication(test2);
         jobman.AddApplication(test3);
+        jobman.AddApplication(test4);
+        jobman.AddApplication(test5);
+        jobman.AddApplication(test6);
         //// end testdata 
 
 
@@ -121,11 +126,16 @@ internal class Program
                     int parsed;
                     while (true)
                     {
-                        Console.WriteLine("Enter your salary expecation as a number:");
+                        Console.WriteLine("Enter your salary expectation as a number in SEK:");
                         var salary = Console.ReadLine();
                         var res = Int32.TryParse(salary, out parsed);
                         if (res)
                         {
+                            if(parsed < 0)
+                            {
+                                Console.WriteLine("Salary cant be negative, try again.");
+                                continue;
+                            }
                             break;
                         }
                     }
@@ -163,8 +173,6 @@ internal class Program
                         if (resolved)
                         {
                             status = applicationStatuses[statusSelector - 1];
-                            Console.WriteLine("Press any key to continue...");
-                            Console.ReadKey();
                             break;
                         }
                     }
@@ -188,8 +196,89 @@ internal class Program
                     Console.ReadKey();
                     break;
                 case MenuSelect.UpdateStatus:
+                    var SelectIndexToUpdate = 0;
+                    var allapplications = jobman.ReturnAllApplications();
+                    bool resolvedInput = false;
+                    while (!resolvedInput)
+                    {
+                        SelectIndexToUpdate = 0;
+                        Console.WriteLine("====== Update Status ====");
+                        Console.WriteLine("==== select Application to update ====");
+
+                        foreach (var a in allapplications)
+                        {
+                            var indexer = allapplications.IndexOf(a) + 1;
+                            Console.WriteLine($"{indexer}.{a.GetSummary()}");
+                        }
+                        var input = Console.ReadLine();
+                        resolvedInput = Int32.TryParse(input, out SelectIndexToUpdate);
+                        if (SelectIndexToUpdate > allapplications.Count || SelectIndexToUpdate < 1)
+                        {
+                            resolvedInput = false;
+                            Console.WriteLine("Invalid input, try again");
+                        }
+                    }
+
+                    bool resolvedStatusInput = false;
+                    while (!resolvedStatusInput)
+                    {
+                        Console.WriteLine("=== Select Status to Update with ====");
+                        var statusSelector = 0;
+                        var index = 0;
+                        var applicationStatuses2 = Enum.GetValues<ApplicationStatus>();
+                        foreach (var entry in applicationStatuses2)
+                        {
+                            index++;
+                            Console.WriteLine($"{index}.{entry}");
+                        }
+                        var statusinput = Console.ReadLine();
+                        resolvedStatusInput = Int32.TryParse(statusinput, out statusSelector);
+                        if (statusSelector > applicationStatuses2.Length || statusSelector < 1)
+                        {
+                            resolvedStatusInput = false;
+                            Console.WriteLine("Invalid input, try again");
+                        }
+                        else
+                        {
+                            var statusToUpdate = applicationStatuses2[statusSelector - 1];
+                            var appToUpdate = allapplications[SelectIndexToUpdate - 1];
+                            jobman.UpdateStatus(appToUpdate, statusToUpdate);
+                            Console.WriteLine("Status updated. Press any key to continue...");
+                            Console.ReadKey();
+                            break;
+                        }
+                    }
+
                     break;
                 case MenuSelect.RemoveApplication:
+                    Console.WriteLine("========= Select Application to remove =======");
+                    var allapps = jobman.ReturnAllApplications();
+                    var selectIndexToRemove = 0;
+                    var resolvedRemoveInput = false;
+                    while (!resolvedRemoveInput)
+                    {
+                        selectIndexToRemove = 0;
+                        foreach (var a in allapps)
+                        {
+                            var indexer = allapps.IndexOf(a) + 1;
+                            Console.WriteLine($"{indexer}.{a.GetSummary()}");
+                        }
+                        var input = Console.ReadLine();
+                        resolvedRemoveInput = Int32.TryParse(input, out selectIndexToRemove);
+                        if (selectIndexToRemove > allapps.Count || selectIndexToRemove < 1)
+                        {
+                            resolvedRemoveInput = false;
+                            Console.WriteLine("Invalid input, try again");
+                        }
+                        else
+                        {
+                            var appToRemove = allapps[selectIndexToRemove - 1];
+                            jobman.RemoveJob(appToRemove);
+                            Console.WriteLine("Application removed. Press any key to continue...");
+                            Console.ReadKey();
+                            break;
+                        }
+                    }
                     break;
                 case MenuSelect.ExitApplication:
                     return;

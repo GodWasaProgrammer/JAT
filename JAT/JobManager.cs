@@ -6,6 +6,11 @@ public class JobManager
 {
     private List<JobApplication> Applications = [];
 
+    public List<JobApplication> ReturnAllApplications()
+    {
+        return Applications;
+    }
+
     public void AddApplication(JobApplication application)
     {
         Applications.Add(application);
@@ -80,11 +85,44 @@ public class JobManager
         Console.WriteLine("=== Job Application Statistics ===\n");
         Console.WriteLine($"Total applications: {total}");
         Console.WriteLine($"Average requested salary: {avgSalary:F0} SEK\n");
+    
+        var responded = Applications.Where(a => a.ResponseDate != null).ToList();
+        if (responded.Any())
+        {
+            var avgResponseDays = responded
+                .Average(a => (a.ResponseDate.Value - a.ApplicationDate).TotalDays);
+            Console.WriteLine($"Average response time: {avgResponseDays:F1} days");
+        }
+        else
+        {
+            Console.WriteLine("Average response time: N/A (no responses yet)");
+        }
         Console.WriteLine($"Applications older than 14 days:{OlderThan14Days}");
 
         Console.WriteLine("Applications by status:");
         foreach (var group in byStatus)
+        {
+            // Välj färg baserat på status
+            switch (group.Status)
+            {
+                case ApplicationStatus.Accepted:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case ApplicationStatus.Rejected:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    break;
+            }
+
             Console.WriteLine($"  {group.Status}: {group.Count}");
+
+            // Återställ färgen till standard
+            Console.ResetColor();
+        }
+
+
 
         Console.WriteLine($"\nNewest application: {latest.GetSummary()}");
         Console.WriteLine($"Oldest application: {oldest.GetSummary()}");
