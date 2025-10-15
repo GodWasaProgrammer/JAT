@@ -1,82 +1,10 @@
 ﻿using Enums;
-using System.Globalization;
 
 namespace JAT;
 
 public class JobManager
 {
-    private List<JobApplication> Applications = new List<JobApplication>();
-
-    public void MenuAddApplication()
-    {
-        // get company name
-        Console.WriteLine("Enter company");
-        var CompanyName = Console.ReadLine();
-
-        // get job title
-        Console.WriteLine("Enter job Title");
-        var jobtitle = Console.ReadLine();
-
-        // get status
-        var appstatus = ApplicationStatus.Applied;
-
-
-        bool looper = false;
-        var selector = 0;
-        while (!looper)
-        {
-            Console.WriteLine($"select status:");
-            foreach (var entry in Enum.GetValues(typeof(ApplicationStatus)))
-            {
-                selector++;
-                Console.WriteLine($"{selector}.{entry.ToString()}");
-            }
-            looper = Int32.TryParse(Console.ReadLine(), out selector);
-        }
-        if (selector == 1)
-            appstatus = ApplicationStatus.Applied;
-        if (selector == 2)
-            appstatus = ApplicationStatus.Interviewing;
-        if (selector == 3)
-            appstatus = ApplicationStatus.Offer;
-        if (selector == 4)
-            appstatus = ApplicationStatus.Rejected;
-        if (selector == 5)
-            appstatus = ApplicationStatus.Accepted;
-
-
-        // parse date
-        DateTime applicationDate;
-        while (true)
-        {
-            Console.WriteLine("Enter application date in the format of: 2025/01/25");
-            string input = Console.ReadLine();
-
-            if (DateTime.TryParseExact(input, "yyyy/MM/dd",
-                CultureInfo.InvariantCulture, DateTimeStyles.None, out applicationDate))
-            {
-                break;
-            }
-
-            Console.WriteLine("❌ Ogiltigt datumformat. Försök igen.\n");
-        }
-
-        // parse salary
-        int parsed;
-        while (true)
-        {
-            Console.WriteLine("Enter your salary expecation as a number:");
-            var salary = Console.ReadLine();
-            var res = Int32.TryParse(salary, out parsed);
-            if (res)
-            {
-                break;
-            }
-        }
-
-        var newapplication = new JobApplication(CompanyName, jobtitle, appstatus, applicationDate, parsed);
-        Applications.Add(newapplication);
-    }
+    private List<JobApplication> Applications = [];
 
     public void AddApplication(JobApplication application)
     {
@@ -105,9 +33,73 @@ public class JobManager
         {
             Console.WriteLine(entry.GetSummary());
         }
-        if(res.Count == 0)
+        if (res.Count == 0)
         {
             Console.WriteLine("No applications found with that status.");
+        }
+    }
+
+    public void SortByDate()
+    {
+        var res = Applications.OrderBy(a => a.GetDaysSinceApplied()).ToList();
+        foreach (var entry in res)
+        {
+            Console.WriteLine(entry.GetSummary());
+        }
+    }
+
+    public void ShowStatistics()
+    {
+        if (Applications.Count == 0)
+        {
+            Console.WriteLine("No job applications found.");
+            return;
+        }
+
+        // total number
+        int total = Applications.Count;
+
+        // Group by status
+        var byStatus = Applications
+            .GroupBy(a => a.Status)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .OrderByDescending(x => x.Count);
+
+        // average salary
+        double avgSalary = Applications.Average(a => a.SalaryExpectation);
+
+        var OlderThan14Days = Applications.Count(a => a.GetDaysSinceApplied() > 14);
+
+        // Newest application
+        var latest = Applications.OrderByDescending(a => a.ApplicationDate).First();
+
+        // Oldest application
+        var oldest = Applications.OrderBy(a => a.ApplicationDate).First();
+
+        // show results
+        Console.WriteLine("=== Job Application Statistics ===\n");
+        Console.WriteLine($"Total applications: {total}");
+        Console.WriteLine($"Average requested salary: {avgSalary:F0} SEK\n");
+        Console.WriteLine($"Applications older than 14 days:{OlderThan14Days}");
+
+        Console.WriteLine("Applications by status:");
+        foreach (var group in byStatus)
+            Console.WriteLine($"  {group.Status}: {group.Count}");
+
+        Console.WriteLine($"\nNewest application: {latest.GetSummary()}");
+        Console.WriteLine($"Oldest application: {oldest.GetSummary()}");
+        ShowOlderThen14DaysAndNoResponse();
+    }
+
+    public void ShowOlderThen14DaysAndNoResponse()
+    {
+        var pendingOlderThan14Days = Applications.Where(a => a.ResponseDate == null && a.GetDaysSinceApplied() > 14)
+                                                 .ToList();
+        Console.WriteLine($"\nApplications without response older than 14 days: {pendingOlderThan14Days.Count}");
+
+        foreach (var app in pendingOlderThan14Days)
+        {
+            Console.WriteLine($"  - {app.GetSummary()} ({app.GetDaysSinceApplied()} days ago)");
         }
     }
 
