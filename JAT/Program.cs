@@ -163,8 +163,6 @@ internal class Program
                         if (resolved)
                         {
                             status = applicationStatuses[statusSelector - 1];
-                            Console.WriteLine("Press any key to continue...");
-                            Console.ReadKey();
                             break;
                         }
                     }
@@ -188,6 +186,59 @@ internal class Program
                     Console.ReadKey();
                     break;
                 case MenuSelect.UpdateStatus:
+                    var SelectAppToUpdate = 0;
+                    var allapplications = jobman.ReturnAllApplications();
+                    bool resolvedInput = false;
+                    while (!resolvedInput)
+                    {
+                        SelectAppToUpdate = 0;
+                        Console.WriteLine("====== Update Status ====");
+                        Console.WriteLine("==== select Application to update ====");
+
+                        foreach (var a in allapplications)
+                        {
+                            var indexer = allapplications.IndexOf(a) + 1;
+                            Console.WriteLine($"{indexer}.{a.GetSummary()}");
+                        }
+                        var input = Console.ReadLine();
+                        resolvedInput = Int32.TryParse(input, out SelectAppToUpdate);
+                        if (SelectAppToUpdate > allapplications.Count || SelectAppToUpdate < 1)
+                        {
+                            resolvedInput = false;
+                            Console.WriteLine("Invalid input, try again");
+                        }
+                    }
+
+                    bool resolvedStatusInput = false;
+                    while (!resolvedStatusInput)
+                    {
+                        Console.WriteLine("=== Select Status to Update with ====");
+                        var statusSelector = 0;
+                        var index = 0;
+                        var applicationStatuses2 = Enum.GetValues<ApplicationStatus>();
+                        foreach (var entry in applicationStatuses2)
+                        {
+                            index++;
+                            Console.WriteLine($"{index}.{entry}");
+                        }
+                        var statusinput = Console.ReadLine();
+                        resolvedStatusInput = Int32.TryParse(statusinput, out statusSelector);
+                        if (statusSelector > applicationStatuses2.Length || statusSelector < 1)
+                        {
+                            resolvedStatusInput = false;
+                            Console.WriteLine("Invalid input, try again");
+                        }
+                        else
+                        {
+                            var statusToUpdate = applicationStatuses2[statusSelector - 1];
+                            var appToUpdate = allapplications[SelectAppToUpdate - 1];
+                            jobman.UpdateStatus(appToUpdate, statusToUpdate);
+                            Console.WriteLine("Status updated. Press any key to continue...");
+                            Console.ReadKey();
+                            break;
+                        }
+                    }
+
                     break;
                 case MenuSelect.RemoveApplication:
                     break;

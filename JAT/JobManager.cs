@@ -6,6 +6,11 @@ public class JobManager
 {
     private List<JobApplication> Applications = [];
 
+    public List<JobApplication> ReturnAllApplications()
+    {
+        return Applications;
+    }
+
     public void AddApplication(JobApplication application)
     {
         Applications.Add(application);
@@ -106,5 +111,11 @@ public class JobManager
     public void RemoveJob(JobApplication jobApplication)
     {
         Applications.Remove(jobApplication);
+    }
+
+    public void ChangeStatus(JobApplication jobApplication, ApplicationStatus newStatus)
+    {
+        var app = Applications.Find(a => a == jobApplication);
+        app?.UpdateStatus(newStatus);
     }
 }
