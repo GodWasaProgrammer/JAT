@@ -1,11 +1,16 @@
 ﻿using Enums;
+using System.Globalization;
 
 namespace JAT;
 
 internal class Program
 {
+
+
     static void Main()
     {
+        var jobman = new JobManager();
+        // test data 
         var datetime1 = new DateTime(2025, 11, 5);
         var datetime2 = new DateTime(2025, 4, 5);
         var datetime3 = new DateTime(2025, 7, 5);
@@ -14,10 +19,11 @@ internal class Program
         var test2 = new JobApplication("CodeMonkeys INC", "Vibe Code CleanUp Specialist", ApplicationStatus.Applied, datetime2, deg);
         var test3 = new JobApplication("Foobar INC", "Dev", ApplicationStatus.Applied, datetime3, deg);
 
-        var jobman = new JobManager();
         jobman.AddApplication(test1);
         jobman.AddApplication(test2);
         jobman.AddApplication(test3);
+        //// end testdata 
+
 
         var menuChoice = MenuSelect.AddApplication;
         var menuChoices = Enum.GetValues<MenuSelect>();
@@ -58,10 +64,81 @@ internal class Program
             switch (menuChoice)
             {
                 case MenuSelect.AddApplication:
-                    jobman.MenuAddApplication();
+                    var choices = Enum.GetValues<ApplicationStatus>();
+                    // get company name
+                    Console.WriteLine("Enter company");
+                    var CompanyName = Console.ReadLine();
+
+                    // get job title
+                    Console.WriteLine("Enter job Title");
+                    var jobtitle = Console.ReadLine();
+
+                    // get status
+                    var appstatus = ApplicationStatus.Applied;
+
+
+                    bool looper = false;
+                    var StatusSelect = 0;
+                    while (!looper)
+                    {
+                        StatusSelect = 0;
+                        Console.WriteLine($"select status:");
+                        foreach (var entry in choices)
+                        {
+                            StatusSelect++;
+                            Console.WriteLine($"{StatusSelect}.{entry.ToString()}");
+                        }
+                        looper = Int32.TryParse(Console.ReadLine(), out StatusSelect);
+                        if (StatusSelect > choices.Length || StatusSelect < 1)
+                        {
+                            looper = false;
+                            Console.WriteLine("Erroneous input, try again");
+                        }
+                        else
+                        {
+                            {
+                                appstatus = choices[StatusSelect - 1];
+                            }
+                        }
+                    }
+                    // parse date
+                    DateTime applicationDate;
+                    while (true)
+                    {
+                        Console.WriteLine("Enter application date in the format of: 2025/01/25");
+                        string input = Console.ReadLine();
+
+                        if (DateTime.TryParseExact(input, "yyyy/MM/dd",
+                            CultureInfo.InvariantCulture, DateTimeStyles.None, out applicationDate))
+                        {
+                            break;
+                        }
+
+                        Console.WriteLine("wrong format. Try again.\n");
+                    }
+
+                    // parse salary
+                    int parsed;
+                    while (true)
+                    {
+                        Console.WriteLine("Enter your salary expecation as a number:");
+                        var salary = Console.ReadLine();
+                        var res = Int32.TryParse(salary, out parsed);
+                        if (res)
+                        {
+                            break;
+                        }
+                    }
+
+                    var newapplication = new JobApplication(CompanyName, jobtitle, appstatus, applicationDate, parsed);
+                    jobman.AddApplication(newapplication);
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
                     break;
                 case MenuSelect.ShowAllApplications:
                     jobman.ShowAll();
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
                     break;
                 case MenuSelect.FilterByStatus:
                     var applicationStatuses = Enum.GetValues<ApplicationStatus>();
@@ -86,14 +163,29 @@ internal class Program
                         if (resolved)
                         {
                             status = applicationStatuses[statusSelector - 1];
+                            Console.WriteLine("Press any key to continue...");
+                            Console.ReadKey();
                             break;
                         }
                     }
                     jobman.FilterByStatus(status);
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
                     break;
                 case MenuSelect.SortByDate:
+                    jobman.SortByDate();
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
                     break;
                 case MenuSelect.ShowStatistics:
+                    jobman.ShowStatistics();
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    break;
+                case MenuSelect.ShowOlderThen14DaysAndNoResponse:
+                    jobman.ShowOlderThen14DaysAndNoResponse();
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
                     break;
                 case MenuSelect.UpdateStatus:
                     break;

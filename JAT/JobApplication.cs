@@ -13,15 +13,13 @@ public class JobApplication
         SalaryExpectation = salaryExpectation;
     }
 
-    private string? CompanyName { get; set; }
-    private string? PositionTitle { get; set; }
+    public string? CompanyName { get; set; }
+    public string? PositionTitle { get; set; }
 
     public ApplicationStatus Status { get; set; }
-    private DateTime ApplicationDate { get; set; }
-    private DateTime? ResponseDate { get; set; }
-    private int SalaryExpectation { get; set; }
-
-    
+    public DateTime ApplicationDate { get; set; }
+    public DateTime? ResponseDate { get; set; }
+    public int SalaryExpectation { get; set; }
 
     public int GetDaysSinceApplied()
     {
