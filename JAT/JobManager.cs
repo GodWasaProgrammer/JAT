@@ -4,6 +4,7 @@ namespace JAT;
 
 public class JobManager
 {
+    // our list of applications
     private List<JobApplication> Applications = [];
 
     public List<JobApplication> ReturnAllApplications()
@@ -121,9 +122,6 @@ public class JobManager
             // Återställ färgen till standard
             Console.ResetColor();
         }
-
-
-
         Console.WriteLine($"\nNewest application: {latest.GetSummary()}");
         Console.WriteLine($"Oldest application: {oldest.GetSummary()}");
         ShowOlderThen14DaysAndNoResponse();
