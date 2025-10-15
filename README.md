@@ -55,3 +55,5 @@ Syftet med projektet är att visa kunskap inom:
 ## Reflektion
 1. Linq är användbart men jag föredrar vanliga loopar för läsbarhetens skull.
 2. Switch cases. Jag hatar switch cases. De är fula och svårlästa och kräver massa scaffolding.
+
+Björn Nilsson, 2025-10-15
