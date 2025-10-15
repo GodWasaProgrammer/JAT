@@ -186,12 +186,12 @@ internal class Program
                     Console.ReadKey();
                     break;
                 case MenuSelect.UpdateStatus:
-                    var SelectAppToUpdate = 0;
+                    var SelectIndexToUpdate = 0;
                     var allapplications = jobman.ReturnAllApplications();
                     bool resolvedInput = false;
                     while (!resolvedInput)
                     {
-                        SelectAppToUpdate = 0;
+                        SelectIndexToUpdate = 0;
                         Console.WriteLine("====== Update Status ====");
                         Console.WriteLine("==== select Application to update ====");
 
@@ -201,8 +201,8 @@ internal class Program
                             Console.WriteLine($"{indexer}.{a.GetSummary()}");
                         }
                         var input = Console.ReadLine();
-                        resolvedInput = Int32.TryParse(input, out SelectAppToUpdate);
-                        if (SelectAppToUpdate > allapplications.Count || SelectAppToUpdate < 1)
+                        resolvedInput = Int32.TryParse(input, out SelectIndexToUpdate);
+                        if (SelectIndexToUpdate > allapplications.Count || SelectIndexToUpdate < 1)
                         {
                             resolvedInput = false;
                             Console.WriteLine("Invalid input, try again");
@@ -231,7 +231,7 @@ internal class Program
                         else
                         {
                             var statusToUpdate = applicationStatuses2[statusSelector - 1];
-                            var appToUpdate = allapplications[SelectAppToUpdate - 1];
+                            var appToUpdate = allapplications[SelectIndexToUpdate - 1];
                             jobman.UpdateStatus(appToUpdate, statusToUpdate);
                             Console.WriteLine("Status updated. Press any key to continue...");
                             Console.ReadKey();
@@ -241,6 +241,34 @@ internal class Program
 
                     break;
                 case MenuSelect.RemoveApplication:
+                    Console.WriteLine("========= Select Application to remove =======");
+                    var allapps = jobman.ReturnAllApplications();
+                    var selectIndexToRemove = 0;
+                    var resolvedRemoveInput = false;
+                    while (!resolvedRemoveInput)
+                    {
+                        selectIndexToRemove = 0;
+                        foreach (var a in allapps)
+                        {
+                            var indexer = allapps.IndexOf(a) + 1;
+                            Console.WriteLine($"{indexer}.{a.GetSummary()}");
+                        }
+                        var input = Console.ReadLine();
+                        resolvedRemoveInput = Int32.TryParse(input, out selectIndexToRemove);
+                        if (selectIndexToRemove > allapps.Count || selectIndexToRemove < 1)
+                        {
+                            resolvedRemoveInput = false;
+                            Console.WriteLine("Invalid input, try again");
+                        }
+                        else
+                        {
+                            var appToRemove = allapps[selectIndexToRemove - 1];
+                            jobman.RemoveJob(appToRemove);
+                            Console.WriteLine("Application removed. Press any key to continue...");
+                            Console.ReadKey();
+                            break;
+                        }
+                    }
                     break;
                 case MenuSelect.ExitApplication:
                     return;
